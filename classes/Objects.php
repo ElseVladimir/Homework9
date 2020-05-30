@@ -106,4 +106,41 @@ class Objects
         }
     }
 
+    //Забирает предметы и обьединяет их с преподавателями через связующую таблицу
+    static public function getObjectsAndTeachers(PDO $pdo){
+        try{
+            $sql = 'SELECT o.id as obj_id,o.title,r.id_teachers,r.id_objects,t.id,t.name,t.surname FROM objects as o
+                    INNER JOIN relation as r ON r.id_objects = o.id
+                    INNER JOIN teachers as t ON t.id = r.id_teachers
+                    ORDER BY o.id';
+            $statement = $pdo->prepare($sql);
+            $statement->execute();
+            $result = $statement->fetchAll();
+            return $result;
+        }catch (Exception $exception){
+            echo 'Error read from db '.$exception->getCode().$exception->getCode();
+            die();
+        }
+    }
+
+    //забирает предметы по айди из обьединенной таблицы
+    static public function getTeachersForObjects(PDO $pdo,$id){
+        try{
+            $sql = 'SELECT o.id,o.title,r.id_teachers,r.id_objects,t.id,t.name,t.surname FROM objects as o
+                    INNER JOIN relation	as r ON o.id = r.id_objects
+                    INNER JOIN teachers as t ON t.id = r.id_teachers
+                    WHERE o.id = :id 
+                    ORDER BY o.id';
+            $statement = $pdo->prepare($sql);
+            $statement->bindValue(':id', $id);
+            $statement->execute();
+            $result = $statement->fetchAll();
+            return $result;
+        }catch (Exception $exception){
+            echo 'Error read from db '.$exception->getCode().$exception->getCode();
+            die();
+        }
+    }
+
+
 }

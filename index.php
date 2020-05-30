@@ -1,6 +1,7 @@
 <?php
 require_once "config/connect_db.php";
 require_once "classes/Teachers.php";
+require_once "classes/Objects.php";
 
 $getAll = Teachers::getDepartmentsToTeachers($pdo);
 
@@ -12,7 +13,7 @@ $getAll = Teachers::getDepartmentsToTeachers($pdo);
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Homework8</title>
+    <title>Homework9</title>
 </head>
 <body>
 
@@ -34,6 +35,23 @@ $getAll = Teachers::getDepartmentsToTeachers($pdo);
             <td><?=$get['depName'];?></td>
         </tr>
         <?php endforeach;?>
+    </table>
+<hr>
+    <?php $relObjectsToTeachers = Objects::getObjectsAndTeachers($pdo); ?>
+    <h2>Предметы</h2>
+    <table>
+        <tr>
+            <th>Предмет</th>
+            <th>Имя препода</th>
+            <th>Фамилия</th>
+        </tr>
+        <?php foreach($relObjectsToTeachers as $result): ?>
+        <tr>
+            <td><a href="object.php?id=<?=$result['obj_id'];?>&name=<?=$result['name'];?>&surname=<?=$result['surname'];?>"><?=$result['title'];?></a></td>
+            <td><?=$result['name'];?></td>
+            <td><?=$result['surname'];?></td>
+        </tr>
+        <?php endforeach; ?>
     </table>
 
 </body>
